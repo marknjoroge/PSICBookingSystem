@@ -3,7 +3,6 @@ package personnel;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Patient {
@@ -14,9 +13,6 @@ public class Patient {
     private String name;
     private String id;
     private String address;
-    private String expertise;
-    private String consultationHrs;
-    private String consultationDays;
 
     private String answer;
 
@@ -40,18 +36,7 @@ public class Patient {
         addToDB(dataBase);
     }
 
-    public void actions(int ans) {
-        if (ans == 1) {
-            newPatient();
-        } else if (ans == 2) {
-            id = qString("Enter Patient's ID");
-            openDB(dataBase, id);
-        } else {
-            System.out.println("Please select the correct choice (using numbers)");
-        }
-    }
-
-    private void newPatient() {
+    public void newPatient() {
         System.out.println(path);
         name = qString("Patient's name: ");
         id = qString("Patient's id: ");
@@ -87,7 +72,7 @@ public class Patient {
         }
     }
 
-    private boolean openDB(String file, String id) {
+    public boolean openDB(String file, String id) {
         path += file;
         try {
             sc = new Scanner(new File(path));
