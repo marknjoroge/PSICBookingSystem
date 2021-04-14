@@ -10,6 +10,8 @@ import common.IDGenerator;
 
 public class Physician {
 
+    Patient patient = new Patient();
+
     private String phoneNo;
     private String fName;
     private String lName;
@@ -17,6 +19,8 @@ public class Physician {
     private String address;
     private String expertise;
     private int daysAvailable;
+
+    private String personType;
     private String availablePeriod;
     private String daysToDB;
 
@@ -38,6 +42,25 @@ public class Physician {
 
     public Physician() {
         // actions();
+    }
+
+    public void bookAppointment() {
+        personType = qString("Are you a visitor or a patient?\n1. Visitor\n2. Patient");
+        switch(personType){
+            case "1":
+                //TODO some stuff here
+                break;
+            case "2":
+                patient.patientBook();
+                break;
+            default:
+                //TODO: more stuff
+                break;
+        }
+    }
+
+    public void listPhysicians() {
+        answer = qString("Filter by:\n1. Name\n2. Expertise");
     }
 
     public void newPhysician() {

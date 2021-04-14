@@ -23,6 +23,8 @@ public class Patient {
 
     public Scanner sc = new Scanner(System.in);
 
+    public Physician physician = new Physician();
+
     public Patient() {
         // actions();
     }
@@ -35,6 +37,27 @@ public class Patient {
 
         addToDB(dataBase);
     }
+
+    public void patientBook() {
+        name = qString("Enter Your Name: ");
+        address = qString("Enter your address: ");
+        
+        System.out.println("Is this you?\n1. Yes\n2. No");
+        openDB("Patient.txt", name);
+        answer = sc.nextLine();
+        switch(answer) {
+            case "1":
+                physician.listPhysicians();
+                break;
+            case "2":
+                System.exit(0);
+            default:
+                patientBook();
+                break;
+        }
+    }
+
+    
 
     public void newPatient() {
         System.out.println(path);
