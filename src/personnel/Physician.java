@@ -19,7 +19,7 @@ public class Physician {
 
     private String personInfo = "";
 
-    String path = System.getProperty("user.dir") + "/src/database/";
+    String path = System.getProperty("user.dir") + "/database/";
     // String path = path1.substring(0, (path1.length() - 4)) + "/database/";
 
     public Scanner sc = new Scanner(System.in);

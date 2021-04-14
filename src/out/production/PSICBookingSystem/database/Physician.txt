@@ -2,4 +2,3 @@ Name :: 123123123	ID :: null	Address :: vegas	Expertise :: null	Phone :: 7107003
 Name :: melvin achieng	ID :: 409234	Address :: inter	Expertise :: null	Phone :: 79890127
 	Name      :: kelvin	\n	ID :: 109223109	\n	Address   :: askldm	\n	Expertise :: null	\n	Phone :: 1209309123
 	Name  :: beatrice mokoni	ID ::  123123	Address   :: shabab	Expertise :: Fundi		Phone :: 79128912	Free on :: Mon Tue Wed Thur	at :: 10 am - 12 pm
-	Name  :: John	ID ::  3455	Address   :: 98877	Expertise :: Dietitian		Phone :: 4456	Free on :: Mon Tue Wed	at :: 8 to 5
