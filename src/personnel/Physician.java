@@ -6,20 +6,22 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import common.GeneralSchedule;
-import myCal.*;
+import common.IDGenerator;
 
 public class Physician {
 
-    private int phoneNo;
-    private String name;
+    private String phoneNo;
+    private String fName;
+    private String lName;
     private String id;
     private String address;
     private String expertise;
-    private String consultationHrs;
-    private String consultationDays;
     private int daysAvailable;
     private String availablePeriod;
-    private int availableTo;
+    private String daysToDB;
+
+    private int[] availableDays = {0,0,0,0,0,0,0};
+    private String[] availableHours = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
 
     private String answer;
 
@@ -28,7 +30,9 @@ public class Physician {
     public GeneralSchedule generalSchedule = new GeneralSchedule();
 
     String path = System.getProperty("user.dir") + "/src/database/";
-    // String path = path1.substring(0, (path1.length() - 4)) + "/database/";
+    //uncomment the 2 lines below and comment the line above if you are using windows
+    // String path1 = System.getProperty("user.dir");
+    // String path = path1.substring(0, (path1.length() - 4)) + "\\database\\";
 
     public Scanner sc = new Scanner(System.in);
 
@@ -36,43 +40,42 @@ public class Physician {
         // actions();
     }
 
-    public Physician(String name, String id, String address, int phoneNo, String expertise, String consultationHrs, String consultationDays) {
-        this.name = name;
-        this.id = id;
-        this.address = address;
-        this.phoneNo = phoneNo;
-        this.expertise = expertise;
-        this.consultationHrs = consultationHrs;
-        this.consultationDays = consultationDays;
-
-        addToDB("Physician.txt");
-    }
-
-
     public void newPhysician() {
         System.out.println(path);
-        name = qString("Physician's name: ");
-        id = qString("Physician's id: ");
+        fName = qString("Physician's first name: ");
+        lName = qString("Physician's last name: ");
         address = qString("Physician's address: ");
-        phoneNo = Integer.parseInt(qString("Physician's phone Number: "));
+        phoneNo = qString("Physician's phone Number: ");
         expertise = qString("Doctor's expertise");
-        consultationDays = qString("Days of the week available (in 'Mon Tue Wed' format): ");
-        consultationHrs = qString("Time of the day available: ");
         addPhysicianSchedule();
+        IDGenerator idGenerator = new IDGenerator(lName);
+        id = idGenerator.toString();
 
         addToDB("Physician.txt");
     }
 
     public void addPhysicianSchedule() {
-        daysAvailable = Integer.parseInt(qString("How many days will you be available?"));
+        daysAvailable = Integer.parseInt(qString("How many days of the week will you be available?"));
+        if (daysAvailable > 7) addPhysicianSchedule();
         System.out.println("Please select the days, pressing enter each time you select a day.");
         System.out.println(generalSchedule.printAllDays());;
         for(int i = 1; i <= daysAvailable; i++) {
-            int x = Integer.parseInt(qString("Day " + i + ": "));
-            availablePeriod = qString("Available sessions(Enter letters to show when available, pressing enter each time you select a day.)");
+            availableDays[i-1] = Integer.parseInt(qString("Day " + i + ": "));
+            System.out.println("Available sessions(Enter letters to show when available, pressing enter each time you select a day. Press 'z' when done.");
             System.out.println(generalSchedule.printAllHours());
+            String y = "";
+            int j = 0;
+
+            while (y != "z")
+            {
+                availableHours[j] = y;
+                y = sc.next();
+                System.out.println(y);
+                j++;
+            }
             // generalSchedule.addDay(x, availablePeriod, availableTo);
         }
+        addScheduleToDB(availableDays);
     }
 
     public String qString(String question) {
@@ -81,17 +84,34 @@ public class Physician {
         return answer;
     }
 
-    private void addToDB(String file) {
+    private void addScheduleToDB(int [] x) {
+        for(int i = 0; i < 7; i++) {
+            daysToDB += x[i];
+        }
+        try {
+            path += "PhysicianTime.txt";
 
+            FileWriter fr = new FileWriter(path, true);
+
+            fr.write(personInfo);
+
+            System.out.println("Can't add to db");
+            fr.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private void addToDB(String file) {
         try {
             path += file;
 
             FileWriter fr = new FileWriter(path, true);
 
-            personInfo = "\tName  :: " + name + "\tID ::  " 
+            personInfo = "\tName  :: " + fName + lName + "\tID ::  " 
                 + id + "\tAddress   :: " + address + "\tExpertise :: "
-                + expertise + "\t" + "\tPhone :: " + phoneNo + "\tFree on :: "
-                + consultationDays + "\tat :: " + consultationHrs;
+                + expertise + "\t" + "\tPhone :: " + phoneNo;
             fr.write(personInfo + "\n");
 
             System.out.println("Successfully created user");

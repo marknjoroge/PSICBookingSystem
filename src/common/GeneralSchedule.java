@@ -2,7 +2,6 @@ package common;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import myCal.*;
 
 public class GeneralSchedule {
 
@@ -35,16 +34,18 @@ public class GeneralSchedule {
         hours.add(new AbstractMap.SimpleEntry("d", "0930 - 1000"));
         hours.add(new AbstractMap.SimpleEntry("e", "1000 - 1030"));
         hours.add(new AbstractMap.SimpleEntry("f", "1030 - 1100"));
-        hours.add(new AbstractMap.SimpleEntry("g", "1130 - 1200"));
-        hours.add(new AbstractMap.SimpleEntry("h", "1200 - 1230"));
-        hours.add(new AbstractMap.SimpleEntry("i", "1230 - 1300"));
-        hours.add(new AbstractMap.SimpleEntry("j", "1300 - 1330"));
-        hours.add(new AbstractMap.SimpleEntry("k", "1330 - 1400"));
-        hours.add(new AbstractMap.SimpleEntry("l", "1430 - 1500"));
-        hours.add(new AbstractMap.SimpleEntry("m", "1500 - 1530"));
-        hours.add(new AbstractMap.SimpleEntry("n", "1530 - 1600"));
-        hours.add(new AbstractMap.SimpleEntry("o", "1600 - 1630"));
-        hours.add(new AbstractMap.SimpleEntry("p", "1630 - 1700"));
+        hours.add(new AbstractMap.SimpleEntry("g", "1100 - 1130"));
+        hours.add(new AbstractMap.SimpleEntry("h", "1130 - 1200"));
+        hours.add(new AbstractMap.SimpleEntry("i", "1200 - 1230"));
+        hours.add(new AbstractMap.SimpleEntry("j", "1230 - 1300"));
+        hours.add(new AbstractMap.SimpleEntry("k", "1300 - 1330"));
+        hours.add(new AbstractMap.SimpleEntry("l", "1330 - 1400"));
+        hours.add(new AbstractMap.SimpleEntry("m", "1400 - 1430"));
+        hours.add(new AbstractMap.SimpleEntry("n", "1430 - 1500"));
+        hours.add(new AbstractMap.SimpleEntry("o", "1500 - 1530"));
+        hours.add(new AbstractMap.SimpleEntry("p", "1530 - 1600"));
+        hours.add(new AbstractMap.SimpleEntry("q", "1600 - 1630"));
+        hours.add(new AbstractMap.SimpleEntry("r", "1630 - 1700"));
     }
 
     public String printAllHours() {
