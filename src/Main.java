@@ -10,6 +10,7 @@ public class Main {
     static Scanner quest = new Scanner(System.in);
     static int res;
     static String id;
+    static GeneralSchedule generalSchedule = new GeneralSchedule();
 
     public static void main(String[] args) {
 
@@ -46,6 +47,8 @@ public class Main {
             case 6:
                 room.newRoom();
                 break;
+            case 7:
+                System.out.println(generalSchedule.printAllDays());
         }
     }
 }

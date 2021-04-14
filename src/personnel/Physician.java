@@ -5,6 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import common.GeneralSchedule;
+import myCal.*;
+
 public class Physician {
 
     private int phoneNo;
@@ -14,10 +17,15 @@ public class Physician {
     private String expertise;
     private String consultationHrs;
     private String consultationDays;
+    private int daysAvailable;
+    private String availablePeriod;
+    private int availableTo;
 
     private String answer;
 
     private String personInfo = "";
+
+    public GeneralSchedule generalSchedule = new GeneralSchedule();
 
     String path = System.getProperty("user.dir") + "/src/database/";
     // String path = path1.substring(0, (path1.length() - 4)) + "/database/";
@@ -50,8 +58,21 @@ public class Physician {
         expertise = qString("Doctor's expertise");
         consultationDays = qString("Days of the week available (in 'Mon Tue Wed' format): ");
         consultationHrs = qString("Time of the day available: ");
+        addPhysicianSchedule();
 
         addToDB("Physician.txt");
+    }
+
+    public void addPhysicianSchedule() {
+        daysAvailable = Integer.parseInt(qString("How many days will you be available?"));
+        System.out.println("Please select the days, pressing enter each time you select a day.");
+        System.out.println(generalSchedule.printAllDays());;
+        for(int i = 1; i <= daysAvailable; i++) {
+            int x = Integer.parseInt(qString("Day " + i + ": "));
+            availablePeriod = qString("Available sessions(Enter letters to show when available, pressing enter each time you select a day.)");
+            System.out.println(generalSchedule.printAllHours());
+            // generalSchedule.addDay(x, availablePeriod, availableTo);
+        }
     }
 
     public String qString(String question) {

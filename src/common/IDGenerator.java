@@ -1,8 +1,8 @@
 package common;
 
 public class IDGenerator {
-    IDGenerator() {
-
+    IDGenerator(String type) {
+        
     }
 
 
