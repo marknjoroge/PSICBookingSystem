@@ -53,7 +53,6 @@ public class Patient {
     }
 
     private void addToDB(String file) {
-
         try {
             path += file;
 

@@ -10,24 +10,25 @@ public class Main {
     static Scanner quest = new Scanner(System.in);
     static int res;
     static String id;
+    static GeneralSchedule generalSchedule = new GeneralSchedule();
 
     public static void main(String[] args) {
 
 
         System.out.println("Welocome. PSIC cares abut you. Please select an option to proceed.\n"
-        + "1. Add physician to the system.\n"
-        + "2. Find physician.\n"
-        + "3. Add patient to the system.\n"
-        + "4. Find patient.\n"
-        + "5. Find treatment.\n"
-        + "6. Add room\n");
+            + "1. Add physician to the system.\n"
+            + "2. Find physician.\n"
+            + "3. Add patient to the system.\n"
+            + "4. Find patient.\n"
+            + "5. Book Doctor's appointment.\n"
+            + "6. Add room\n"
+        );
         
         res = quest.nextInt();
 
         actions(res);
     }
     public static void actions(int ans) {
-
         switch(ans) {
             case 1:
                 physician.newPhysician();
@@ -46,6 +47,8 @@ public class Main {
             case 6:
                 room.newRoom();
                 break;
+            case 7:
+                System.out.println(generalSchedule.printAllDays());
         }
     }
 }
