@@ -25,9 +25,9 @@ public class Treatment {
 
     public void newTreatment() {
         name = qString("Patient's name: ");
+        room = qString("\nRoom number: ");
+        physician = ("\nPhysician: ");
         type = qString("\nType of treatment: ");
-        room = qString("\nRoom number");
-        physician = ("\nPhysician");
 
     }
 
