@@ -1,0 +1,174 @@
+package personnel;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Driver {
+
+    Physician physician = new Physician();
+
+    private String response;
+
+    Scanner scanner = new Scanner(System.in);
+
+    public void init() {
+        ArrayList<Physician> physicians = Physician.loadPhysicians();
+        System.out.println("\t Welcome to PSIC. We care about you."
+        +" \nTo select an option enter the number preceeding it.\n");
+        response = qString("Please select an option\n1. Book appointment\n2. Exit");
+        
+        switch(response) {
+            case "1":
+//                physician.bookAppointment();
+                checkStatus();
+                break;
+            case "2":
+                System.out.println("Thank you for choosing PSIC.");
+                System.exit(0);
+            default: 
+                System.out.println("Please enter a valid option\n");
+                init();
+        }
+
+    }
+
+    private void checkStatus() {
+        System.out.println("\t Are you a visitor (1) or patient (2)\n");
+        response = qString("Please select an option\n1. Visitor\n2. Patient");
+
+        switch(response) {
+            case "1":
+                Visitor visitor = captureVisitorDetails();
+                searchPhysicianByExpertise();
+                break;
+            case "2":
+                Patient patient = capturePatientDetails();
+                searchPhysicianByExpertise();
+                break;
+            default:
+                System.out.println("Please enter a valid option\n");
+                checkStatus();
+        }
+    }
+
+    private void searchPhysicianByExpertise() {
+        ArrayList<Physician> physicians = Physician.loadPhysicians();
+        System.out.print("Enter physician's expertise: ");
+        String expertise = scanner.nextLine();
+        ArrayList<Physician> matchedPhysicians = new ArrayList<>();
+        for (Physician physician : physicians) {
+            if (physician.getExpertise().equalsIgnoreCase(expertise)) {
+                matchedPhysicians.add(physician);
+            }
+        }
+        if(matchedPhysicians.size() < 1){
+            System.out.println("Could not find any physician with expertise " + expertise);
+            String choice = qString("Do you want to search again?\n 1. Yes, 2.No :");
+            if(choice.equals("1")){
+                searchPhysicianByExpertise();
+            }else if(choice.equals("2")){
+                return;
+            }else{
+                System.out.println("Invalid entry.");
+                searchPhysicianByExpertise();
+            }
+        }else{
+            System.out.println("The following physicians match your selected expertise");
+            for (Physician physician : physicians) {
+                System.out.println(physician.getName());
+            }
+            String name = qString("Enter name of physician to check availability: ");
+            bookPhysicianSchedule(name, physicians);
+
+        }
+    }
+
+    private void bookPhysicianSchedule(String name, ArrayList<Physician> physicians) {
+        boolean workingSession = false;
+        boolean booked = false;
+        for(Physician physician: physicians){
+            if(physician.getName().equalsIgnoreCase(name)){
+                System.out.println("Working Hours: " + physician.getWorkingHours());
+                System.out.println("Bookings: " + physician.getBookings().toString());
+                String appointment = qString("Pick appointment day and time (e.g. mon-16 for Mondday 4pm)");
+                String appointmentDay = appointment.split("-")[0];
+                String appointmentTime = appointment.split("-")[1];
+                for (Session session : physician.getAvailability()) {
+                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
+                        workingSession = true;
+                    }
+                }
+                for (Session session : physician.getBookings()) {
+                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
+                        booked = true;
+                    }
+                }
+
+                if(!booked && workingSession){
+                    physician.book(appointmentDay, appointmentTime);
+                    updatePhysicianDB(physicians);
+                }
+
+            }
+        }
+//        for(Physician physician: physicians){
+//            if(physician.getName().equalsIgnoreCase(name)){
+//                System.out.println("Working Hours: " + physician.getWorkingHours());
+//                System.out.println("Bookings: " + physician.getBookings().toString());
+//                String appointment = qString("Pick appointment day and time (e.g. mon-16 for Mondday 4pm)");
+//                String appointmentDay = appointment.split("-")[0];
+//                String appointmentTime = appointment.split("-")[1];
+//                if(physician.getWorkingHours().contains(appointmentDay)){
+//                    for (String daySchedule : physician.getWorkingHours().split(":")) {
+//                        if(daySchedule.contains(appointmentTime)){
+//                            for(Session session : physician.getBookings()){
+//                                if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
+//                                    System.out.println("The Physician is booked at that time");
+//                                    bookPhysicianSchedule(name, physicians);
+//                                }
+//                            }
+//                            physician.setBooking(appointmentDay, appointmentTime);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        System.out.println("Could not match physician.");
+    }
+
+    public void updatePhysicianDB(ArrayList<Physician> physicians){
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter("filepath.txt");
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        for (Physician physician: physicians) {
+            pw.write(physician.getName());
+        }
+    }
+
+    private Visitor captureVisitorDetails() {
+        System.out.print("Enter visitor's name: ");
+        String name = scanner.nextLine();
+        return new Visitor(name);
+    }
+
+    private Patient capturePatientDetails() {
+        System.out.print("Enter patient's name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter patient's address: ");
+        String address = scanner.nextLine();
+        return new Patient(name, address);
+    }
+
+
+    public String qString(String question) {
+        System.out.println(question);
+        response = scanner.nextLine();
+        return response;
+    }
+}

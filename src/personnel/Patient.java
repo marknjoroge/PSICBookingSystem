@@ -3,6 +3,7 @@ package personnel;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Patient {
@@ -18,13 +19,19 @@ public class Patient {
 
     private String personInfo = "";
 
-    String path = System.getProperty("user.dir") + "/src/database/";
+    String path = System.getProperty("user.dir") + "/database/";
     // String path = path1.substring(0, (path1.length() - 4)) + "/database/";
 
     public Scanner sc = new Scanner(System.in);
 
     public Patient() {
         // actions();
+        int y;
+    }
+
+    public Patient(String name, String address){
+        this.name = name;
+        this.address = address;
     }
 
     public Patient(String name, String id, String address, int phoneNo) {
@@ -36,6 +43,32 @@ public class Patient {
         addToDB(dataBase);
     }
 
+<<<<<<< Updated upstream
+=======
+
+
+    public void patientBook() {
+        name = qString("Enter Your Name: ");
+        address = qString("Enter your address: ");
+        
+        System.out.println("Is this you?\n1. Yes\n2. No");
+        openDB("Patient.txt", name);
+        answer = sc.nextLine();
+        switch(answer) {
+            case "1":
+                physician.listPhysicians();
+                break;
+            case "2":
+                System.exit(0);
+            default:
+                patientBook();
+                break;
+        }
+    }
+
+    
+
+>>>>>>> Stashed changes
     public void newPatient() {
         System.out.println(path);
         name = qString("Patient's name: ");

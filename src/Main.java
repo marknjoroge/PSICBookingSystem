@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+<<<<<<< Updated upstream
 
         System.out.println("Welocome. PSIC cares abut you. Please select an option to proceed.\n"
         + "1. Add physician to the system.\n"
@@ -47,5 +48,8 @@ public class Main {
                 room.newRoom();
                 break;
         }
+=======
+        driver.init();
+>>>>>>> Stashed changes
     }
 }

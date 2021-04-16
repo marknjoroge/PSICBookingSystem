@@ -3,17 +3,44 @@ package personnel;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Physician {
 
+<<<<<<< Updated upstream
     private int phoneNo;
+=======
+//    Patient patient = new Patient();
+
+    private String phoneNo;
+    private String fName;
+    private String lName;
+>>>>>>> Stashed changes
     private String name;
     private String id;
     private String address;
     private String expertise;
+<<<<<<< Updated upstream
     private String consultationHrs;
     private String consultationDays;
+=======
+    private int daysAvailable;
+    private String workingHours;
+    private ArrayList<Session> availability = new ArrayList<>();
+    private String booking;
+    private ArrayList<Session> bookings = new ArrayList<>();
+
+    private String personType;
+    private String availablePeriod;
+    private String daysToDB;
+
+    // available days, from monday to sunday
+    private boolean[] availableDays = {false,false,false,false,false,false,false};
+    // available hours, from 8am to 6pm
+    private boolean[] availableHours = {false, false, false, false, false, false, false, false, false, false, false};
+
+>>>>>>> Stashed changes
 
     private String answer;
 
@@ -28,6 +55,7 @@ public class Physician {
         // actions();
     }
 
+<<<<<<< Updated upstream
     public Physician(String name, String id, String address, int phoneNo, String expertise, String consultationHrs, String consultationDays) {
         this.name = name;
         this.id = id;
@@ -36,6 +64,99 @@ public class Physician {
         this.expertise = expertise;
         this.consultationHrs = consultationHrs;
         this.consultationDays = consultationDays;
+=======
+    public Physician(String name, String expertise) {
+        this.name = name;
+        this.expertise = expertise;
+    }
+
+    public Physician(String name, String id, String expertise, String phone, String availability, String booking) {
+        this.name = name;
+        this.id = id;
+        this.expertise = expertise;
+        this.phoneNo = phone;
+        this.workingHours = availability;
+        this.booking = booking;
+        populateAvailability(availability);
+        populateBookings(booking);
+    }
+
+    public void populateAvailability(String availability){
+        String weekDay, time;
+        for(String day: availability.split(":")){
+            weekDay = day.split("-")[0];
+            for(int i = 1; i<day.split("-").length; i++){
+                time = day.split("-")[i];
+                this.availability.add(new Session(weekDay, time));
+            }
+        }
+    }
+
+    public void populateBookings(String booking){
+        String weekDay, time;
+        for(String day: booking.split(":")){
+            weekDay = day.split("-")[0];
+            for(int i = 1; i<day.split("-").length; i++){
+                time = day.split("-")[i];
+                this.bookings.add(new Session(weekDay, time));
+            }
+        }
+    }
+
+    public ArrayList<Session> getAvailability(){
+        return this.availability;
+    }
+
+    public static ArrayList<Physician> loadPhysicians(){
+        ArrayList<Physician> physicians= new ArrayList<>();
+        String path = System.getProperty("user.dir") + "/PSICBookingSystem/src/database/";
+        String file = "Physician.txt";
+        path += file;
+        try {
+            Scanner sc = new Scanner(new File(path));
+            String str = "";
+            boolean firstLine = true;
+            do {
+                try {
+                    str = sc.nextLine().toLowerCase();
+                } catch (Exception e) {
+                    System.out.print("Empty database :(   .   ");
+                }
+                if (!firstLine) {
+                    String name = str.split(",")[0];
+                    String ID = str.split(",")[1];
+                    String expertise = str.split(",")[2];
+                    String phone = str.split(",")[3];
+                    String availability = str.split(",")[4];
+                    String bookings = str.split(",")[5];
+                    Physician physician = new Physician(name, ID, expertise, phone, availability, bookings);
+                    physicians.add(physician);
+                } else {
+                    // skip first line (header row)
+                    firstLine = false;
+                }
+            } while (sc.hasNextLine());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return physicians;
+    }
+
+    public void bookAppointment() {
+        personType = qString("Are you a visitor or a patient?\n1. Visitor\n2. Patient");
+        switch(personType){
+            case "1":
+                //TODO some stuff here
+                break;
+            case "2":
+//                patient.patientBook();
+                break;
+            default:
+                //TODO: more stuff
+                break;
+        }
+    }
+>>>>>>> Stashed changes
 
         addToDB("Physician.txt");
     }
@@ -48,18 +169,85 @@ public class Physician {
         address = qString("Physician's address: ");
         phoneNo = Integer.parseInt(qString("Physician's phone Number: "));
         expertise = qString("Doctor's expertise");
+<<<<<<< Updated upstream
         consultationDays = qString("Days of the week available (in 'Mon Tue Wed' format): ");
         consultationHrs = qString("Time of the day available: ");
+=======
+//        addPhysicianSchedule();
+        IDGenerator idGenerator = new IDGenerator(lName);
+        id = idGenerator.toString();
+>>>>>>> Stashed changes
 
         addToDB("Physician.txt");
     }
 
+<<<<<<< Updated upstream
+=======
+//    public void addPhysicianSchedule() {
+//        daysAvailable = Integer.parseInt(qString("How many days of the week will you be available?"));
+//        if (daysAvailable > 7) addPhysicianSchedule();
+//        System.out.println("Please select the days, pressing enter each time you select a day.");
+//        System.out.println(generalSchedule.printAllDays());;
+//        for(int i = 1; i <= daysAvailable; i++) {
+//            availableDays[i-1] = Integer.parseInt(qString("Day " + i + ": "));
+//            System.out.println("Available sessions(Enter letters to show when available, pressing enter each time you select a day. Press 'z' when done.");
+//            System.out.println(generalSchedule.printAllHours());
+//            String y = "";
+//            int j = 0;
+//
+//            while (y != "z")
+//            {
+//                availableHours[j] = y;
+//                y = sc.next();
+//                System.out.println(y);
+//                j++;
+//            }
+//            // generalSchedule.addDay(x, availablePeriod, availableTo);
+//        }
+//        addScheduleToDB(availableDays);
+//    }
+
+>>>>>>> Stashed changes
     public String qString(String question) {
         System.out.println(question);
         answer = sc.nextLine();
         return answer;
     }
 
+<<<<<<< Updated upstream
+=======
+    public String getExpertise(){
+        return this.expertise;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getWorkingHours(){
+        return this.workingHours;
+    }
+
+    private void addScheduleToDB(int [] x) {
+        for(int i = 0; i < 7; i++) {
+            daysToDB += x[i];
+        }
+        try {
+            path += "PhysicianTime.txt";
+
+            FileWriter fr = new FileWriter(path, true);
+
+            fr.write(personInfo);
+
+            System.out.println("Can't add to db");
+            fr.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+>>>>>>> Stashed changes
     private void addToDB(String file) {
 
         try {
@@ -104,5 +292,18 @@ public class Physician {
         }
         System.out.println("User not found");
         return false;
+    }
+
+    public void setBooking(String appointmentDay, String appointmentTime) {
+        Session session = new Session(appointmentDay, appointmentTime);
+        bookings.add(session);
+    }
+
+    public ArrayList<Session> getBookings(){
+        return this.bookings;
+    }
+
+    public void book(String appointmentDay, String appointmentTime) {
+        this.bookings.add(new Session(appointmentDay, appointmentTime));
     }
 }
