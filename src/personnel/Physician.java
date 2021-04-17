@@ -8,28 +8,21 @@ import java.util.Scanner;
 
 public class Physician {
 
-<<<<<<< Updated upstream
-    private int phoneNo;
-=======
-//    Patient patient = new Patient();
-
-    private String phoneNo;
-    private String fName;
-    private String lName;
->>>>>>> Stashed changes
     private String name;
     private String id;
     private String address;
-    private String expertise;
-<<<<<<< Updated upstream
+    private ArrayList<String> expertise = new ArrayList<>();
+    private String phoneNo;
+
     private String consultationHrs;
     private String consultationDays;
-=======
+
     private int daysAvailable;
     private String workingHours;
     private ArrayList<Session> availability = new ArrayList<>();
     private String booking;
     private ArrayList<Session> bookings = new ArrayList<>();
+    private ArrayList<Session> sessions = new ArrayList<>();
 
     private String personType;
     private String availablePeriod;
@@ -40,7 +33,7 @@ public class Physician {
     // available hours, from 8am to 6pm
     private boolean[] availableHours = {false, false, false, false, false, false, false, false, false, false, false};
 
->>>>>>> Stashed changes
+
 
     private String answer;
 
@@ -55,41 +48,46 @@ public class Physician {
         // actions();
     }
 
-<<<<<<< Updated upstream
-    public Physician(String name, String id, String address, int phoneNo, String expertise, String consultationHrs, String consultationDays) {
-        this.name = name;
-        this.id = id;
-        this.address = address;
-        this.phoneNo = phoneNo;
-        this.expertise = expertise;
-        this.consultationHrs = consultationHrs;
-        this.consultationDays = consultationDays;
-=======
-    public Physician(String name, String expertise) {
-        this.name = name;
-        this.expertise = expertise;
-    }
+//    public Physician(String name, String expertise) {
+//        this.name = name;
+//        this.expertise = expertise;
+//    }
 
-    public Physician(String name, String id, String expertise, String phone, String availability, String booking) {
+    public Physician(String name, String id, String expertise, String phone, String availability) {
         this.name = name;
         this.id = id;
-        this.expertise = expertise;
+//        this.expertise = expertise;
         this.phoneNo = phone;
         this.workingHours = availability;
         this.booking = booking;
         populateAvailability(availability);
-        populateBookings(booking);
+        populateExpertise(expertise);
+//        populateBookings(booking);
+    }
+
+    public  void populateExpertise(String expertise){
+        for(String xpts: expertise.split(":")){
+            this.expertise.add(xpts);
+        }
     }
 
     public void populateAvailability(String availability){
-        String weekDay, time;
-        for(String day: availability.split(":")){
-            weekDay = day.split("-")[0];
-            for(int i = 1; i<day.split("-").length; i++){
-                time = day.split("-")[i];
-                this.availability.add(new Session(weekDay, time));
-            }
+        String week, day, time, status;
+        for(String d: availability.split(":")){
+            week = d.split("\\.")[0];
+            day = d.split("\\.")[1];
+            time = d.split("=")[0].split("\\.")[2];
+            status = d.split("=")[1];
+            this.availability.add(new Session(week, day, time, status));
         }
+    }
+    
+    public String getWorkSchedule(){
+        String schedule = "";
+        for (Session session : availability) {
+            schedule += session.week + "." + session.day + "." + session.hours + "-" + session.status + "\n";
+        }
+        return schedule;
     }
 
     public void populateBookings(String booking){
@@ -108,7 +106,7 @@ public class Physician {
     }
 
     public static ArrayList<Physician> loadPhysicians(){
-        ArrayList<Physician> physicians= new ArrayList<>();
+        ArrayList<Physician> physicians= new ArrayList<Physician>();
         String path = System.getProperty("user.dir") + "/PSICBookingSystem/src/database/";
         String file = "Physician.txt";
         path += file;
@@ -128,8 +126,8 @@ public class Physician {
                     String expertise = str.split(",")[2];
                     String phone = str.split(",")[3];
                     String availability = str.split(",")[4];
-                    String bookings = str.split(",")[5];
-                    Physician physician = new Physician(name, ID, expertise, phone, availability, bookings);
+//                    String bookings = str.split(",")[5];
+                    Physician physician = new Physician(name, ID, expertise, phone, availability);
                     physicians.add(physician);
                 } else {
                     // skip first line (header row)
@@ -156,10 +154,8 @@ public class Physician {
                 break;
         }
     }
->>>>>>> Stashed changes
-
-        addToDB("Physician.txt");
-    }
+//        addToDB("Physician.txt");
+//    }
 
 
     public void newPhysician() {
@@ -167,22 +163,21 @@ public class Physician {
         name = qString("Physician's name: ");
         id = qString("Physician's id: ");
         address = qString("Physician's address: ");
-        phoneNo = Integer.parseInt(qString("Physician's phone Number: "));
-        expertise = qString("Doctor's expertise");
-<<<<<<< Updated upstream
+//        phoneNo = Integer.parseInt(qString("Physician's phone Number: "));
+//        expertise = qString("Doctor's expertise");
+
         consultationDays = qString("Days of the week available (in 'Mon Tue Wed' format): ");
         consultationHrs = qString("Time of the day available: ");
-=======
+
 //        addPhysicianSchedule();
-        IDGenerator idGenerator = new IDGenerator(lName);
-        id = idGenerator.toString();
->>>>>>> Stashed changes
+//        IDGenerator idGenerator = new IDGenerator(lName);
+//        id = idGenerator.toString();
+
 
         addToDB("Physician.txt");
     }
 
-<<<<<<< Updated upstream
-=======
+
 //    public void addPhysicianSchedule() {
 //        daysAvailable = Integer.parseInt(qString("How many days of the week will you be available?"));
 //        if (daysAvailable > 7) addPhysicianSchedule();
@@ -207,16 +202,15 @@ public class Physician {
 //        addScheduleToDB(availableDays);
 //    }
 
->>>>>>> Stashed changes
+
     public String qString(String question) {
         System.out.println(question);
         answer = sc.nextLine();
         return answer;
     }
 
-<<<<<<< Updated upstream
-=======
-    public String getExpertise(){
+
+    public ArrayList<String> getExpertise(){
         return this.expertise;
     }
 
@@ -247,7 +241,7 @@ public class Physician {
         }
     }
 
->>>>>>> Stashed changes
+
     private void addToDB(String file) {
 
         try {

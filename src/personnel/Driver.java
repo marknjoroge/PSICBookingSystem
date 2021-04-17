@@ -3,6 +3,7 @@ package personnel;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Driver {
@@ -14,7 +15,7 @@ public class Driver {
     Scanner scanner = new Scanner(System.in);
 
     public void init() {
-        ArrayList<Physician> physicians = Physician.loadPhysicians();
+//        ArrayList<Physician> physicians = Physician.loadPhysicians();
         System.out.println("\t Welcome to PSIC. We care about you."
         +" \nTo select an option enter the number preceeding it.\n");
         response = qString("Please select an option\n1. Book appointment\n2. Exit");
@@ -59,8 +60,10 @@ public class Driver {
         String expertise = scanner.nextLine();
         ArrayList<Physician> matchedPhysicians = new ArrayList<>();
         for (Physician physician : physicians) {
-            if (physician.getExpertise().equalsIgnoreCase(expertise)) {
-                matchedPhysicians.add(physician);
+            for(String xpts: physician.getExpertise()){
+                if (xpts.equalsIgnoreCase(expertise)) {
+                    matchedPhysicians.add(physician);
+                }
             }
         }
         if(matchedPhysicians.size() < 1){
@@ -76,7 +79,7 @@ public class Driver {
             }
         }else{
             System.out.println("The following physicians match your selected expertise");
-            for (Physician physician : physicians) {
+            for (Physician physician : matchedPhysicians) {
                 System.out.println(physician.getName());
             }
             String name = qString("Enter name of physician to check availability: ");
@@ -88,29 +91,39 @@ public class Driver {
     private void bookPhysicianSchedule(String name, ArrayList<Physician> physicians) {
         boolean workingSession = false;
         boolean booked = false;
+        boolean bookSuccess = false;
+        String appointment = "";
+        String appointmentWeek = "";
+        String appointmentDay = "";
+        String appointmentTime = "";
         for(Physician physician: physicians){
             if(physician.getName().equalsIgnoreCase(name)){
-                System.out.println("Working Hours: " + physician.getWorkingHours());
-                System.out.println("Bookings: " + physician.getBookings().toString());
-                String appointment = qString("Pick appointment day and time (e.g. mon-16 for Mondday 4pm)");
-                String appointmentDay = appointment.split("-")[0];
-                String appointmentTime = appointment.split("-")[1];
+                System.out.println("Schedule for Physiciain: " + name);
+                System.out.println(physician.getWorkSchedule());
+                appointment = qString("Pick appointment week, day and time (e.g. 1.mon.8-10 for Monday 4pm)");
+                appointmentWeek = appointment.split("\\.")[0];
+                appointmentDay = appointment.split("\\.")[1];
+                appointmentTime = appointment.split("\\.")[2];
                 for (Session session : physician.getAvailability()) {
-                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
-                        workingSession = true;
+                    if(session.week.equalsIgnoreCase(appointmentWeek) && session.day.equalsIgnoreCase(appointmentDay) && session.hours.equalsIgnoreCase(appointmentTime) && session.status.equalsIgnoreCase("available")){
+                        bookSuccess = true;
+                        session.status = "Booked";
                     }
-                }
-                for (Session session : physician.getBookings()) {
-                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
-                        booked = true;
-                    }
-                }
 
-                if(!booked && workingSession){
-                    physician.book(appointmentDay, appointmentTime);
-                    updatePhysicianDB(physicians);
+//                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
+//                        workingSession = true;
+//                    }
                 }
+//                for (Session session : physician.getBookings()) {
+//                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
+//                        booked = true;
+//                    }
+//                }
 
+//                if(!booked && workingSession){
+//                    physician.book(appointmentDay, appointmentTime);
+//                    updatePhysicianDB(physicians);
+//                }
             }
         }
 //        for(Physician physician: physicians){
@@ -135,7 +148,13 @@ public class Driver {
 //                }
 //            }
 //        }
-        System.out.println("Could not match physician.");
+        if(bookSuccess){
+            System.out.println("Appointment Successfully booked");
+            System.out.println("Details :" + "Week: " + appointmentWeek + "." + appointmentDay + appointmentTime);
+        }else{
+            System.out.println("The time you provided is not available. Try agin");
+            bookPhysicianSchedule(name, physicians);
+        }
     }
 
     public void updatePhysicianDB(ArrayList<Physician> physicians){

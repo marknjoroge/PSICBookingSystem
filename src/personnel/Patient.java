@@ -43,8 +43,7 @@ public class Patient {
         addToDB(dataBase);
     }
 
-<<<<<<< Updated upstream
-=======
+
 
 
     public void patientBook() {
@@ -56,7 +55,7 @@ public class Patient {
         answer = sc.nextLine();
         switch(answer) {
             case "1":
-                physician.listPhysicians();
+//                physician.listPhysicians();
                 break;
             case "2":
                 System.exit(0);
@@ -68,7 +67,7 @@ public class Patient {
 
     
 
->>>>>>> Stashed changes
+
     public void newPatient() {
         System.out.println(path);
         name = qString("Patient's name: ");
