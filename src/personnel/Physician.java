@@ -53,10 +53,10 @@ public class Physician {
 //        this.expertise = expertise;
 //    }
 
-    public Physician(String name, String id, String expertise, String phone, String availability) {
+    public Physician(String name, String id, String expertise, String address, String phone, String availability) {
         this.name = name;
         this.id = id;
-//        this.expertise = expertise;
+        this.address = address;
         this.phoneNo = phone;
         this.workingHours = availability;
         this.booking = booking;
@@ -124,10 +124,11 @@ public class Physician {
                     String name = str.split(",")[0];
                     String ID = str.split(",")[1];
                     String expertise = str.split(",")[2];
-                    String phone = str.split(",")[3];
-                    String availability = str.split(",")[4];
-//                    String bookings = str.split(",")[5];
-                    Physician physician = new Physician(name, ID, expertise, phone, availability);
+                    String address = str.split(",")[3];
+                    String phone = str.split(",")[4];
+                    String availability = str.split(",")[5];
+//                    String bookings = str.split(",")[6];
+                    Physician physician = new Physician(name, ID, expertise, address, phone, availability);
                     physicians.add(physician);
                 } else {
                     // skip first line (header row)
@@ -177,6 +178,14 @@ public class Physician {
         addToDB("Physician.txt");
     }
 
+    public String getAddress(){
+        return this.address;
+    }
+
+    public String getID(){
+        return this.id;
+    }
+
 
 //    public void addPhysicianSchedule() {
 //        daysAvailable = Integer.parseInt(qString("How many days of the week will you be available?"));
@@ -212,6 +221,10 @@ public class Physician {
 
     public ArrayList<String> getExpertise(){
         return this.expertise;
+    }
+
+    public String getPhoneNo(){
+        return this.phoneNo;
     }
 
     public String getName(){

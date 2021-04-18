@@ -1,3 +1,3 @@
-Name, ID, Address, Expertise, Phone, Availability(WeekDayTime=Availability)
-Oliver Thor,5244,Osteopathy:Rehabilitation,85451,1.Wed.8-10=Attended:2.Wed.8-10=Booked:3.Wed.8-10=Available:4.Wed.8-10=Available
-John Wick,4927,Physiotherapy:Rehabilitation,85451,1.Wed.8-10=Attended:2.Wed.8-10=Booked:3.Wed.8-10=Available:4.Wed.8-10=Booked
+Name, ID, Expertise, Address, Phone, Availability(WeekDayTime=Availability)
+oliver thor,5244,osteopathy:rehabilitation,london,85451,1.wed.8-10=attended:2.wed.8-10=booked:3.wed.8-10=available:4.wed.8-10=available
+john wick,4927,physiotherapy:rehabilitation,kent,19054,1.wed.8-10=attended:2.wed.8-10=booked:3.wed.8-10=Booked:4.wed.8-10=booked

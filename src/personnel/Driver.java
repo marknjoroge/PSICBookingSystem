@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,18 +156,38 @@ public class Driver {
             System.out.println("The time you provided is not available. Try agin");
             bookPhysicianSchedule(name, physicians);
         }
+        updatePhysicianDB(physicians);
     }
 
     public void updatePhysicianDB(ArrayList<Physician> physicians){
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter("filepath.txt");
-            pw.close();
-        } catch (FileNotFoundException e) {
+        String name, id, address, expertise, phone, aval;
+        try{
+            FileWriter writer = new FileWriter("PSICBookingSystem/src/database/Physician.txt");
+            writer.write("Name, ID, Expertise, Address, Phone, Availability(WeekDayTime=Availability)" + System.lineSeparator());
+            for(Physician physician: physicians){
+                name = physician.getName();
+                id = physician.getID();
+                address = physician.getAddress();
+                expertise = "";
+                phone = physician.getPhoneNo();
+                for (String exp : physician.getExpertise()) {
+                    expertise += exp + ":";
+                }
+
+                //remove trailing ":" character
+                expertise = expertise.substring(0, expertise.length() - 1);
+                aval = "";
+                for (Session ses : physician.getAvailability()) {
+                    aval += ses.week + "." + ses.day + "." + ses.hours + "=" + ses.status + ":";
+                }
+                // remove trailing ":" character
+                aval = aval.substring(0, aval.length() - 1);
+                writer.write(name + "," + id + "," + expertise + ","
+                        + address + "," + phone + "," + aval + System.lineSeparator());
+            }
+            writer.close();
+        }catch (Exception e){
             e.printStackTrace();
-        }
-        for (Physician physician: physicians) {
-            pw.write(physician.getName());
         }
     }
 
