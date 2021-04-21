@@ -16,7 +16,6 @@ public class Driver {
     Scanner scanner = new Scanner(System.in);
 
     public void init() {
-//        ArrayList<Physician> physicians = Physician.loadPhysicians();
         System.out.println("\t Welcome to PSIC. We care about you."
         +" \nTo select an option enter the number preceeding it.\n");
         response = qString("Please select an option\n1. Book appointment\n2. Exit");
@@ -47,12 +46,34 @@ public class Driver {
                 break;
             case "2":
                 Patient patient = capturePatientDetails();
-                searchPhysicianByExpertise();
+                if(searchPatient(patient)){
+                    searchPhysicianByExpertise();
+                }else{
+                    System.out.println("Patient match failed. Halting...");
+                }
                 break;
             default:
                 System.out.println("Please enter a valid option\n");
                 checkStatus();
         }
+    }
+
+    private boolean searchPatient(Patient patientToSearch){
+        ArrayList<Patient> patients = Patient.loadPatients();
+        for(Patient patient : patients){
+            if(patient.getName().equalsIgnoreCase(patientToSearch.getName())){
+                System.out.println("Confirm if the details below matches the patient");
+                System.out.println("Name: " + patient.getName());
+                System.out.println("ID: " + patient.getID());
+                System.out.println("Address: " + patient.getAddress());
+                System.out.println("Phone: " + patient.getPhone());
+                String confirmation =qString("Is this you? Y/N");
+                boolean result = confirmation.equalsIgnoreCase("y") ? true : false;
+                patientToSearch.setAppointments(patient.getAppointments());
+                return result;
+            }
+        }
+        return false;
     }
 
     private void searchPhysicianByExpertise() {
@@ -108,15 +129,16 @@ public class Driver {
                 appointmentTime = appointment.split("\\.")[2];
                 for (Session session : physician.getAvailability()) {
                     if(session.week.equalsIgnoreCase(appointmentWeek) && session.day.equalsIgnoreCase(appointmentDay) && session.hours.equalsIgnoreCase(appointmentTime) && session.status.equalsIgnoreCase("available")){
+                        // check if patient is available
                         decision = qString("Would you like to cancel? Y/N: ");
                         if(decision.equalsIgnoreCase("y")){
                             System.out.println("Booking cancelled");
-                            session.status = "Cancelled";
+                            session.status = "cancelled";
                             updatePhysicianDB(physicians);
                             return;
                         }else{
                             bookSuccess = true;
-                            session.status = "Booked";
+                            session.status = "booked";
                             updatePhysicianDB(physicians);
                         }
                     }
@@ -145,7 +167,7 @@ public class Driver {
     public void updatePhysicianDB(ArrayList<Physician> physicians){
         String name, id, address, expertise, phone, aval;
         try{
-            FileWriter writer = new FileWriter("PSICBookingSystem/src/database/Physician.txt");
+            FileWriter writer = new FileWriter("PSICBookingSystem/src/database/Physicians.txt");
             writer.write("Name, ID, Expertise, Address, Phone, Availability(WeekDayTime=Availability)" + System.lineSeparator());
             for(Physician physician: physicians){
                 name = physician.getName();

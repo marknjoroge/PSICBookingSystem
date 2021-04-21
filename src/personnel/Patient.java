@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Patient {
+public class Patient extends Client{
 
-    final String dataBase = "Patient.txt";
+//    final String dataBase = "Patients.txt";
 
-    private int phoneNo;
+    private String phoneNo;
     private String name;
     private String id;
     private String address;
+    private ArrayList<Session> appointments = new ArrayList<>();
 
     private String answer;
 
@@ -25,8 +26,7 @@ public class Patient {
     public Scanner sc = new Scanner(System.in);
 
     public Patient() {
-        // actions();
-        int y;
+        // default patient object
     }
 
     public Patient(String name, String address){
@@ -34,48 +34,80 @@ public class Patient {
         this.address = address;
     }
 
-    public Patient(String name, String id, String address, int phoneNo) {
+    public Patient(String name, String id, String address, String phoneNo, String appointments) {
         this.name = name;
         this.id = id;
         this.address = address;
         this.phoneNo = phoneNo;
-
-        addToDB(dataBase);
+        populateAppointments(appointments);
     }
 
+    public String getName(){
+        return this.name;
+    }
 
+    public String getID(){
+        return this.id;
+    }
 
+    public String getPhone(){
+        return this.phoneNo;
+    }
 
-    public void patientBook() {
-        name = qString("Enter Your Name: ");
-        address = qString("Enter your address: ");
-        
-        System.out.println("Is this you?\n1. Yes\n2. No");
-        openDB("Patient.txt", name);
-        answer = sc.nextLine();
-        switch(answer) {
-            case "1":
-//                physician.listPhysicians();
-                break;
-            case "2":
-                System.exit(0);
-            default:
-                patientBook();
-                break;
+    public String getAddress(){
+        return this.address;
+    }
+    public void populateAppointments(String appointments){
+        String week, day, time, status;
+        for(String d: appointments.split(":")){
+            week = d.split("\\.")[0];
+            day = d.split("\\.")[1];
+            time = d.split("=")[0].split("\\.")[2];
+            status = d.split("=")[1];
+            this.appointments.add(new Session(week, day, time, status));
         }
     }
 
-    
+    public static ArrayList<Patient> loadPatients(){
+        ArrayList<Patient> patients= new ArrayList<Patient>();
+        String path = System.getProperty("user.dir") + "/PSICBookingSystem/src/database/";
+        String file = "Patients.txt";
+        path += file;
+        try {
+            Scanner sc = new Scanner(new File(path));
+            String str = "";
+            boolean firstLine = true;
+            do {
+                try {
+                    str = sc.nextLine().toLowerCase();
+                } catch (Exception e) {
+                    System.out.print("Empty database :(   .   ");
+                }
+                if (!firstLine) {
+                    String name = str.split(",")[0];
+                    String ID = str.split(",")[1];
+                    String address = str.split(",")[2];
+                    String phone = str.split(",")[3];
+                    String appointments = str.split(",")[4];
+                    Patient patient = new Patient(name, ID, address, phone, appointments);
+                    patients.add(patient);
+                } else {
+                    // skip first line (header row)
+                    firstLine = false;
+                }
+            } while (sc.hasNextLine());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return patients;
+    }
 
+    public void setAppointments(ArrayList<Session> newAppointments){
+        this.appointments = newAppointments;
+    }
 
-    public void newPatient() {
-        System.out.println(path);
-        name = qString("Patient's name: ");
-        id = qString("Patient's id: ");
-        address = qString("Patient's address: ");
-        phoneNo = Integer.parseInt(qString("Patient's phone Number: "));
-
-        addToDB(dataBase);
+    public ArrayList<Session> getAppointments(){
+        return this.appointments;
     }
 
     private String qString(String question) {
