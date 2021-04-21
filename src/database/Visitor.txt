@@ -1,0 +1,3 @@
+Name, ID, Address, Phone, Appointments
+matthew simmons,007,london,85451,1.wed.8-10=free:2.wed.8-10=free:3.wed.8-10=free:4.wed.8-10=booked
+mohamed idris,007,kent,19054,1.wed.8-10=free:2.wed.8-10=free:3.wed.8-10=free:4.wed.8-10=free

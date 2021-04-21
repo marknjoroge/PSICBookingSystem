@@ -97,66 +97,49 @@ public class Driver {
         String appointmentWeek = "";
         String appointmentDay = "";
         String appointmentTime = "";
+        String decision;
         for(Physician physician: physicians){
             if(physician.getName().equalsIgnoreCase(name)){
                 System.out.println("Schedule for Physiciain: " + name);
                 System.out.println(physician.getWorkSchedule());
-                appointment = qString("Pick appointment week, day and time (e.g. 1.mon.8-10 for Monday 4pm)");
+                appointment = qString("Pick appointment week, day and time (e.g. 1.mon.8-10 for Monday 4pm).");
                 appointmentWeek = appointment.split("\\.")[0];
                 appointmentDay = appointment.split("\\.")[1];
                 appointmentTime = appointment.split("\\.")[2];
                 for (Session session : physician.getAvailability()) {
                     if(session.week.equalsIgnoreCase(appointmentWeek) && session.day.equalsIgnoreCase(appointmentDay) && session.hours.equalsIgnoreCase(appointmentTime) && session.status.equalsIgnoreCase("available")){
-                        bookSuccess = true;
-                        session.status = "Booked";
+                        decision = qString("Would you like to cancel? Y/N: ");
+                        if(decision.equalsIgnoreCase("y")){
+                            System.out.println("Booking cancelled");
+                            session.status = "Cancelled";
+                            updatePhysicianDB(physicians);
+                            return;
+                        }else{
+                            bookSuccess = true;
+                            session.status = "Booked";
+                            updatePhysicianDB(physicians);
+                        }
                     }
-
-//                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
-//                        workingSession = true;
-//                    }
                 }
-//                for (Session session : physician.getBookings()) {
-//                    if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
-//                        booked = true;
-//                    }
-//                }
-
-//                if(!booked && workingSession){
-//                    physician.book(appointmentDay, appointmentTime);
-//                    updatePhysicianDB(physicians);
-//                }
             }
         }
-//        for(Physician physician: physicians){
-//            if(physician.getName().equalsIgnoreCase(name)){
-//                System.out.println("Working Hours: " + physician.getWorkingHours());
-//                System.out.println("Bookings: " + physician.getBookings().toString());
-//                String appointment = qString("Pick appointment day and time (e.g. mon-16 for Mondday 4pm)");
-//                String appointmentDay = appointment.split("-")[0];
-//                String appointmentTime = appointment.split("-")[1];
-//                if(physician.getWorkingHours().contains(appointmentDay)){
-//                    for (String daySchedule : physician.getWorkingHours().split(":")) {
-//                        if(daySchedule.contains(appointmentTime)){
-//                            for(Session session : physician.getBookings()){
-//                                if(session.day.equalsIgnoreCase(appointmentDay) && session.hour.equalsIgnoreCase(appointmentTime)){
-//                                    System.out.println("The Physician is booked at that time");
-//                                    bookPhysicianSchedule(name, physicians);
-//                                }
-//                            }
-//                            physician.setBooking(appointmentDay, appointmentTime);
-//                        }
-//                    }
-//                }
-//            }
-//        }
         if(bookSuccess){
             System.out.println("Appointment Successfully booked");
             System.out.println("Details :" + "Week: " + appointmentWeek + "." + appointmentDay + appointmentTime);
         }else{
-            System.out.println("The time you provided is not available. Try agin");
-            bookPhysicianSchedule(name, physicians);
+            System.out.println("The time you provided is not available. Try picking another time or select a different Physician");
+            String choice = qString("D to select a different physician. \nT to select different time for same physician");
+            if(choice.equalsIgnoreCase("d")){
+                //select different physician
+                searchPhysicianByExpertise();
+            }else if(choice.equalsIgnoreCase("t")){
+                // select different time but same physician
+                bookPhysicianSchedule(name, physicians);
+            }else{
+                // invalid entry.
+                bookPhysicianSchedule(name, physicians);
+            }
         }
-        updatePhysicianDB(physicians);
     }
 
     public void updatePhysicianDB(ArrayList<Physician> physicians){
